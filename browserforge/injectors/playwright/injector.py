@@ -32,13 +32,6 @@ async def AsyncNewContext(
         only_injectable_headers(fingerprint.headers, browser.browser_type.name)
     )
 
-    # Since there are no async lambdas, define a new async function for emulating dark scheme
-    async def on_page(page):
-        await page.emulate_media(color_scheme='dark')
-
-    # Dark mode
-    context.on("page", on_page)
-
     # Inject function
     await context.add_init_script(function)
 
@@ -68,8 +61,6 @@ def NewContext(
     context.set_extra_http_headers(
         only_injectable_headers(fingerprint.headers, browser.browser_type.name)
     )
-    # Dark mode
-    context.on("page", lambda page: page.emulate_media(color_scheme='dark'))
 
     # Inject function
     context.add_init_script(function)
@@ -86,7 +77,6 @@ def _context_options(
     """
     return {
         'user_agent': fingerprint.navigator.userAgent,
-        'color_scheme': 'dark',
         'viewport': {
             'width': fingerprint.screen.width,
             'height': fingerprint.screen.height,
